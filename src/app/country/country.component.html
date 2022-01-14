@@ -1,0 +1,42 @@
+<div class="results">
+    <!-- Begin header -->
+    <app-header></app-header>
+    <!-- End header -->
+
+    <!-- Begin main -->
+    <main class="main results__main">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 col-xl-12">
+                    <header class="box-header box">
+                        <h1 class="title box-header__title">{{ country }}</h1>
+                    </header>
+                    <div class="example-container box-header box">
+                        <div class="loading-shade" *ngIf="isLoadingResults">
+                            <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+                        </div>
+                        <div class="example-table-container">
+                            <table mat-table [dataSource]="data" class="example-table">
+                                <ng-container matColumnDef="city">
+                                    <th mat-header-cell *matHeaderCellDef>City</th>
+                                    <td mat-cell *matCellDef="let row"><a [routerLink]="['/city', row]">{{ row }}</a></td>
+                                </ng-container>
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                            </table>
+                        </div>
+                        <mat-paginator [length]="resultsLength" [pageSize]="pageSize"></mat-paginator>
+                    </div>
+                </div>
+                <div class="d-none col-xl-2" #componentDiv>
+                    <img src="./../../assets/img/ad.png" alt="advertisement">
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- End main -->
+
+    <!-- Begin footer -->
+    <app-footer></app-footer>
+    <!-- End footer -->
+</div>

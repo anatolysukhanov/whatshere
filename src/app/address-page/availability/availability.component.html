@@ -1,0 +1,290 @@
+<div id="availability">
+
+    <div class="box loading-shade" *ngIf="isLoadingResults; else availability">
+        <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+    </div>
+
+    <!-- Begin item -->
+    <ng-template #availability>
+        <h2 class="title box__title">Availability</h2>
+        <div class="box__grid box__grid_s">
+            <div class="choice-item" *ngFor="let category of categories; let i = index">
+                <header class="choice-item__header">
+                    <div class="choice-item__icon" *ngIf="category.image">
+                        <img src="assets/availability/{{ category.image }}">
+                    </div>
+                    <h3 class="choice-item__title">{{ category.name }}</h3>
+                </header>
+                <ng-container *ngIf="category.subcategories; then subcategoriesBlock; else tabsBlock"></ng-container>
+                <ng-template #subcategoriesBlock>
+                    <div class="choice-item__grid" *ngFor="let subcategory of category.subcategories; let j = index">
+                        <p class="choice-item__sub-title">{{ subcategory.name }}</p>
+                        <div class="choice-item__info list-grid">
+                            <header class="list-grid__header">
+                                <p [ngClass]="subcategory.activeTabIndex === z ? 'list-grid__link list-grid__link_active' : 'list-grid__link'"
+                                   *ngFor="let tab of subcategory.tabs; let z = index" (click)="selectSubcategoryTab(i, j, z)">
+                                    {{ tab.name }}
+                                </p>
+                            </header>
+
+                            <div class="box loading-shade" *ngIf="subcategory.isLoadingResults">
+                                <mat-spinner *ngIf="true"></mat-spinner>
+                            </div>
+
+                            <div class="list-grid__content" *ngIf="!subcategory.isLoadingResults">
+                                <div class="list-grid__info">
+                                    <div class="row">
+                                        <div class="col-12 col-lg-4">
+                                            <p class="list-grid__name">{{ subcategory.tabs[subcategory.activeTabIndex].name }} in this
+                                                area<span><a
+                                                    href="https://www.google.com/maps/search/?api=1&query={{ query }}+{{ subcategory.tabs[subcategory.activeTabIndex].tag }}"
+                                                    target="_blank" class="google">{{ getSubcategoryTabQty(i, j, subcategory.activeTabIndex) }}</a></span></p>
+                                        </div>
+                                        <div class="col-12 col-lg-8">
+                                            <p class="list-grid__name">Area ranking by # of {{ subcategory.tabs[subcategory.activeTabIndex].name | lowercase  }}</p>
+                                            <div class="list-grid__wrapper">
+                                                <div class="list-grid__item">
+                                                    <p class="list-grid__item-name">{{ subcategory.city }}</p>
+                                                    <p class="list-grid__item-number">#{{ subcategory.cityRank }}</p>
+                                                    <p class="list-grid__item-note">of {{ subcategory.worstCityRank }} areas</p>
+                                                </div>
+                                                <div class="list-grid__item">
+                                                    <p class="list-grid__item-name">{{ subcategory.country }}</p>
+                                                    <p class="list-grid__item-number">#{{ subcategory.countryRank }}</p>
+                                                    <p class="list-grid__item-note">of {{ subcategory.worstCountryRank }} areas</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="list-grid__chart">
+                                    <p class="list-grid__chart-name">Competitiveness index (in %) <span class="info list-grid__chart-icon"></span></p>
+                                    <div class="level-chart">
+                                        <div class="level-chart__item level-chart__item_t" [ngStyle]="{'left': subcategory.cityCompetitiveIndexStyle}">
+                                            <div class="level-chart__item-info">
+                                                <p class="level-chart__item-name">this city</p>
+                                                <p class="level-chart__item-value">{{ subcategory.cityCompetitiveIndex }}</p>
+                                            </div>
+                                            <div class="level-chart__item-icon">
+                                                <svg width="6.979" height="9.771" viewBox="0 0 6.979 9.771">
+                                                    <g id="Group_1597" data-name="Group 1597" transform="translate(0 0)" opacity="0.5">
+                                                        <g id="Ellipse_80" data-name="Ellipse 80" fill="none" stroke="#232d41" stroke-width="2">
+                                                            <ellipse cx="3.489" cy="3.489" rx="3.489" ry="3.489" stroke="none"/>
+                                                            <ellipse cx="3.489" cy="3.489" rx="2.489" ry="2.489" fill="none"/>
+                                                        </g>
+                                                        <line id="Line_233" data-name="Line 233" y2="4.187" transform="translate(3.489 5.583)" fill="none" stroke="#232d41"
+                                                              stroke-width="2"/>
+                                                    </g>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                        <div class="level-chart__grid">
+                                            <span class="level-chart__name">low competition</span>
+                                            <span class="level-chart__name">high competition</span>
+                                        </div>
+                                        <div class="level-chart__item level-chart__item_b" [ngStyle]="{'left': subcategory.countryCompetitiveIndexStyle}">
+                                            <div class="level-chart__item-info level-chart__item-info_s">
+                                                <p class="level-chart__item-name">this country</p>
+                                                <p class="level-chart__item-value">{{ subcategory.countryCompetitiveIndex }}</p>
+                                            </div>
+                                            <div class="level-chart__item-icon level-chart__item-icon_s">
+                                                <svg width="6.979" height="9.771" viewBox="0 0 6.979 9.771">
+                                                    <g id="Group_1597" data-name="Group 1597" transform="translate(0 0)"
+                                                       opacity="0.5">
+                                                        <g id="Ellipse_80" data-name="Ellipse 80" fill="none" stroke="#232d41" stroke-width="2">
+                                                            <ellipse cx="3.489" cy="3.489" rx="3.489" ry="3.489" stroke="none"/>
+                                                            <ellipse cx="3.489" cy="3.489" rx="2.489" ry="2.489" fill="none"/>
+                                                        </g>
+                                                        <line id="Line_233" data-name="Line 233" y2="4.187" transform="translate(3.489 5.583)" fill="none" stroke="#232d41"
+                                                              stroke-width="2"/>
+                                                    </g>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mobile-level-chart">
+                                        <p class="mobile-level-chart__name">high</p>
+                                        <div class="mobile-level-chart__grid">
+                                            <div class="mobile-level-chart__item mobile-level-chart__item_l" [ngStyle]="{'top': subcategory.cityCompetitiveIndexStyle}">
+                                                <div class="mobile-level-chart__item-info">
+                                                    <p class="mobile-level-chart__item-name">This city</p>
+                                                    <p class="mobile-level-chart__item-value">{{ subcategory.cityCompetitiveIndex }}</p>
+                                                    <div class="mobile-level-chart__item-icon">
+                                                        <svg width="6.979" height="9.771" viewBox="0 0 6.979 9.771">
+                                                            <g id="Group_1597" data-name="Group 1597" transform="translate(0 0)" opacity="0.5">
+                                                                <g id="Ellipse_80" data-name="Ellipse 80" fill="none" stroke="#232d41" stroke-width="2">
+                                                                    <ellipse cx="3.489" cy="3.489" rx="3.489" ry="3.489" stroke="none"/>
+                                                                    <ellipse cx="3.489" cy="3.489" rx="2.489" ry="2.489" fill="none"/>
+                                                                </g>
+                                                                <line id="Line_233" data-name="Line 233" y2="4.187" transform="translate(3.489 5.583)" fill="none" stroke="#232d41"
+                                                                      stroke-width="2"/>
+                                                            </g>
+                                                        </svg>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="mobile-level-chart__item mobile-level-chart__item_r" [ngStyle]="{'top': subcategory.countryCompetitiveIndexStyle}">
+                                                <div class="mobile-level-chart__item-info mobile-level-chart__item-info_s">
+                                                    <div class="mobile-level-chart__item-icon mobile-level-chart__item-icon_s">
+                                                        <svg width="6.979" height="9.771" viewBox="0 0 6.979 9.771">
+                                                            <g id="Group_1597" data-name="Group 1597" transform="translate(0 0)" opacity="0.5">
+                                                                <g id="Ellipse_80" data-name="Ellipse 80" fill="none" stroke="#232d41" stroke-width="2">
+                                                                    <ellipse cx="3.489" cy="3.489" rx="3.489" ry="3.489" stroke="none"/>
+                                                                    <ellipse cx="3.489" cy="3.489" rx="2.489" ry="2.489" fill="none"/>
+                                                                </g>
+                                                                <line id="Line_233" data-name="Line 233" y2="4.187" transform="translate(3.489 5.583)" fill="none" stroke="#232d41"
+                                                                      stroke-width="2"/>
+                                                            </g>
+                                                        </svg>
+                                                    </div>
+                                                    <p class="mobile-level-chart__item-value mobile-level-chart__item-value_s">{{ subcategory.countryCompetitiveIndex }}</p>
+                                                    <p class="mobile-level-chart__item-name">This country</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <p class="mobile-level-chart__name">low</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+                <ng-template #tabsBlock>
+                    <div class="choice-item__grid">
+                        <div class="choice-item__info list-grid">
+                            <header class="list-grid__header">
+                                <p [ngClass]="category.activeTabIndex === j ? 'list-grid__link list-grid__link_active' : 'list-grid__link'"
+                                   *ngFor="let tab of category.tabs; let j = index" (click)="selectCategoryTab(i, j)">
+                                    {{ tab.name }}
+                                </p>
+                            </header>
+
+                            <div class="box loading-shade" *ngIf="category.isLoadingResults">
+                                <mat-spinner *ngIf="true"></mat-spinner>
+                            </div>
+
+                            <div class="list-grid__content" *ngIf="!category.isLoadingResults">
+                                <div class="list-grid__info">
+                                    <div class="row">
+                                        <div class="col-12 col-lg-4">
+                                            <p class="list-grid__name">{{ category.tabs[category.activeTabIndex].name }} in this
+                                                area<span><a href="https://www.google.com/maps/search/?api=1&query={{ query }}+{{ category.tabs[category.activeTabIndex].tag }}"
+                                                             target="_blank" class="google">{{ getCategoryTabQty(i, category.activeTabIndex) }}</a></span></p>
+                                        </div>
+                                        <div class="col-12 col-lg-8">
+                                            <p class="list-grid__name">Area ranking by # of {{ category.tabs[category.activeTabIndex].name | lowercase  }}</p>
+                                            <div class="list-grid__wrapper">
+                                                <div class="list-grid__item">
+                                                    <p class="list-grid__item-name">{{ category.city }}</p>
+                                                    <p class="list-grid__item-number">#{{ category.cityRank }}</p>
+                                                    <p class="list-grid__item-note">of {{ category.worstCityRank }} areas</p>
+                                                </div>
+                                                <div class="list-grid__item">
+                                                    <p class="list-grid__item-name">{{ category.country }}</p>
+                                                    <p class="list-grid__item-number">#{{ category.countryRank }}</p>
+                                                    <p class="list-grid__item-note">of {{ category.worstCountryRank }} areas</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="list-grid__chart">
+                                    <p class="list-grid__chart-name">Competitiveness index (in %) <span class="info list-grid__chart-icon"></span></p>
+                                    <div class="level-chart">
+                                        <div class="level-chart__item level-chart__item_t" [ngStyle]="{'left': category.cityCompetitiveIndexStyle}">
+                                            <div class="level-chart__item-info">
+                                                <p class="level-chart__item-name">this city</p>
+                                                <p class="level-chart__item-value">{{ category.cityCompetitiveIndex }}</p>
+                                            </div>
+                                            <div class="level-chart__item-icon">
+                                                <svg width="6.979" height="9.771" viewBox="0 0 6.979 9.771">
+                                                    <g id="Group_1597" data-name="Group 1597" transform="translate(0 0)" opacity="0.5">
+                                                        <g id="Ellipse_80" data-name="Ellipse 80" fill="none" stroke="#232d41" stroke-width="2">
+                                                            <ellipse cx="3.489" cy="3.489" rx="3.489" ry="3.489" stroke="none"/>
+                                                            <ellipse cx="3.489" cy="3.489" rx="2.489" ry="2.489" fill="none"/>
+                                                        </g>
+                                                        <line id="Line_233" data-name="Line 233" y2="4.187" transform="translate(3.489 5.583)" fill="none" stroke="#232d41"
+                                                              stroke-width="2"/>
+                                                    </g>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                        <div class="level-chart__grid">
+                                            <span class="level-chart__name">low competition</span>
+                                            <span class="level-chart__name">high competition</span>
+                                        </div>
+                                        <div class="level-chart__item level-chart__item_b" [ngStyle]="{'left': category.countryCompetitiveIndexStyle}">
+                                            <div class="level-chart__item-info level-chart__item-info_s">
+                                                <p class="level-chart__item-name">this country</p>
+                                                <p class="level-chart__item-value">{{ category.countryCompetitiveIndex }}</p>
+                                            </div>
+                                            <div class="level-chart__item-icon level-chart__item-icon_s">
+                                                <svg width="6.979" height="9.771" viewBox="0 0 6.979 9.771">
+                                                    <g id="Group_1597" data-name="Group 1597" transform="translate(0 0)"
+                                                       opacity="0.5">
+                                                        <g id="Ellipse_80" data-name="Ellipse 80" fill="none" stroke="#232d41" stroke-width="2">
+                                                            <ellipse cx="3.489" cy="3.489" rx="3.489" ry="3.489" stroke="none"/>
+                                                            <ellipse cx="3.489" cy="3.489" rx="2.489" ry="2.489" fill="none"/>
+                                                        </g>
+                                                        <line id="Line_233" data-name="Line 233" y2="4.187" transform="translate(3.489 5.583)" fill="none" stroke="#232d41"
+                                                              stroke-width="2"/>
+                                                    </g>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Only for mobile -->
+                                    <div class="mobile-level-chart">
+                                        <p class="mobile-level-chart__name">high</p>
+                                        <div class="mobile-level-chart__grid">
+                                            <div class="mobile-level-chart__item mobile-level-chart__item_l" [ngStyle]="{'top': category.cityCompetitiveIndexStyle}">
+                                                <div class="mobile-level-chart__item-info">
+                                                    <p class="mobile-level-chart__item-name">This city</p>
+                                                    <p class="mobile-level-chart__item-value">{{ category.cityCompetitiveIndex }}</p>
+                                                    <div class="mobile-level-chart__item-icon">
+                                                        <svg width="6.979" height="9.771" viewBox="0 0 6.979 9.771">
+                                                            <g id="Group_1597" data-name="Group 1597" transform="translate(0 0)" opacity="0.5">
+                                                                <g id="Ellipse_80" data-name="Ellipse 80" fill="none" stroke="#232d41" stroke-width="2">
+                                                                    <ellipse cx="3.489" cy="3.489" rx="3.489" ry="3.489" stroke="none"/>
+                                                                    <ellipse cx="3.489" cy="3.489" rx="2.489" ry="2.489" fill="none"/>
+                                                                </g>
+                                                                <line id="Line_233" data-name="Line 233" y2="4.187" transform="translate(3.489 5.583)" fill="none" stroke="#232d41"
+                                                                      stroke-width="2"/>
+                                                            </g>
+                                                        </svg>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="mobile-level-chart__item mobile-level-chart__item_r" [ngStyle]="{'top': category.countryCompetitiveIndexStyle}">
+                                                <div class="mobile-level-chart__item-info mobile-level-chart__item-info_s">
+                                                    <div class="mobile-level-chart__item-icon mobile-level-chart__item-icon_s">
+                                                        <svg width="6.979" height="9.771" viewBox="0 0 6.979 9.771">
+                                                            <g id="Group_1597" data-name="Group 1597" transform="translate(0 0)" opacity="0.5">
+                                                                <g id="Ellipse_80" data-name="Ellipse 80" fill="none" stroke="#232d41" stroke-width="2">
+                                                                    <ellipse cx="3.489" cy="3.489" rx="3.489" ry="3.489" stroke="none"/>
+                                                                    <ellipse cx="3.489" cy="3.489" rx="2.489" ry="2.489" fill="none"/>
+                                                                </g>
+                                                                <line id="Line_233" data-name="Line 233" y2="4.187" transform="translate(3.489 5.583)" fill="none" stroke="#232d41"
+                                                                      stroke-width="2"/>
+                                                            </g>
+                                                        </svg>
+                                                    </div>
+                                                    <p class="mobile-level-chart__item-value mobile-level-chart__item-value_s">{{ category.countryCompetitiveIndex }}</p>
+                                                    <p class="mobile-level-chart__item-name">This country</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <p class="mobile-level-chart__name">low</p>
+                                    </div>
+                                    <!-- Only for mobile -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+            </div>
+        </div>
+    </ng-template>
+    <!-- End item -->
+
+</div>

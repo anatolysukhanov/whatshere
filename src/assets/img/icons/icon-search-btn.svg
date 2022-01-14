@@ -1,0 +1,9 @@
+<svg width="44" height="44" viewBox="0 0 44 44">
+  <g id="Group_1431" data-name="Group 1431" transform="translate(190 -155)">
+    <g id="Rectangle_17590" data-name="Rectangle 17590" transform="translate(-190 155)" fill="#fff" stroke="#e6e6e6" stroke-width="1">
+      <rect width="44" height="44" rx="22" stroke="none"/>
+      <rect x="0.5" y="0.5" width="43" height="43" rx="21.5" fill="none"/>
+    </g>
+    <path id="search" d="M18.71,16.982l-4.437-4.615a7.525,7.525,0,1,0-5.761,2.688,7.447,7.447,0,0,0,4.313-1.362l4.471,4.65a.982.982,0,1,0,1.415-1.361ZM8.512,1.964A5.564,5.564,0,1,1,2.948,7.528,5.57,5.57,0,0,1,8.512,1.964Z" transform="translate(-177.59 167.824)" fill="#232d41"/>
+  </g>
+</svg>
